@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNIVERSAL SHOP - Мастерская</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        header {
+            text-align: center;
+            padding: 3rem 0;
+        }
+        
+        .logo {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+        
+        .feature-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: transform 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .feature-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-primary {
+            background: white;
+            color: #667eea;
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+        
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 4rem;
+            padding: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .logo {
+                font-size: 2rem;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">UNIVERSAL SHOP</div>
+            <div class="subtitle">Полная мастерская для создания магазина и обменника USDT/TON</div>
+        </header>
+        
+        <main>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🎨</div>
+                    <div class="feature-title">Графический редактор</div>
+                    <p>Создавайте свои фото, добавляйте надписи, меняйте фон и полностью кастомизируйте интерфейс.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">💰</div>
+                    <div class="feature-title">Обменник USDT/TON</div>
+                    <p>Быстрый и безопасный обмен криптовалют с интеграцией CryptoBot для платежей.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">⚙️</div>
+                    <div class="feature-title">Полный доступ</div>
+                    <p>Полный контроль над всеми элементами магазина. Создавайте свои кнопки и навигацию.</p>
+                </div>
+            </div>
+            
+            <div class="cta-buttons">
+                <a href="/editor" class="btn btn-primary">🎨 Открыть редактор</a>
+                <a href="/admin" class="btn btn-secondary">⚙️ Панель администратора</a>
+                <button onclick="startTutorial()" class="btn btn-secondary">📚 Начать обучение</button>
+            </div>
+        </main>
+        
+        <footer>
+            <p>© 2024 UNIVERSAL SHOP. Все права защищены.</p>
+            <p style="margin-top: 1rem; opacity: 0.8;">Токен бота: 7762911922:AAHdyGVZRwCkI_WtcGW1MPbIdhrcDBpKNvE</p>
+        </footer>
+    </div>
+    
+    <script>
+        function startTutorial() {
+            alert('Добро пожаловать в мастерскую UNIVERSAL SHOP!\n\n1. Используйте редактор для кастомизации\n2. Настройте обменник в админ-панели\n3. Добавьте свои товары и услуги\n\nНачните с редактора для создания уникального дизайна!');
+        }
+    </script>
+</body>
+</html>
