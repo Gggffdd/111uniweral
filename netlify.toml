@@ -1,9 +1,12 @@
 [build]
-  publish = "."
+  publish = "public"
   command = "npm run build"
 
 [build.environment]
   NODE_VERSION = "18"
+
+[functions]
+  directory = "netlify/functions"
 
 [[redirects]]
   from = "/*"
@@ -16,6 +19,4 @@
     X-Frame-Options = "DENY"
     X-Content-Type-Options = "nosniff"
     X-XSS-Protection = "1; mode=block"
-
-[functions]
-  directory = "functions"
+    Content-Security-Policy = "default-src 'self' https://api.telegram.org https://pay.crypt.bot; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:;"
