@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNIVERSAL SHOP - Редактор</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            min-height: 100vh;
+            background: #f5f5f5;
+        }
+        
+        .sidebar {
+            width: 300px;
+            background: white;
+            padding: 2rem;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            overflow-y: auto;
+        }
+        
+        .workspace {
+            flex: 1;
+            padding: 2rem;
+            position: relative;
+        }
+        
+        .canvas {
+            width: 100%;
+            height: 600px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+        
+        .toolbar {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .tool-btn {
+            padding: 0.5rem 1rem;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        
+        .tool-btn:hover {
+            background: #5a67d8;
+        }
+        
+        .section-title {
+            font-size: 1.2rem;
+            margin: 1.5rem 0 1rem 0;
+            color: #333;
+            font-weight: 600;
+        }
+        
+        .control-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #666;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .color-picker {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+        
+        .color-option {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+        
+        .color-option:hover {
+            border-color: #667eea;
+        }
+        
+        .save-btn {
+            width: 100%;
+            padding: 1rem;
+            background: #48bb78;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 2rem;
+        }
+        
+        .save-btn:hover {
+            background: #38a169;
+        }
+        
+        .draggable {
+            position: absolute;
+            cursor: move;
+            user-select: none;
+            resize: both;
+            overflow: auto;
+        }
+        
+        .text-element {
+            min-width: 100px;
+            min-height: 50px;
+            padding: 10px;
+            border: 2px dashed #667eea;
+        }
+        
+        .image-element {
+            max-width: 200px;
+            max-height: 200px;
+            object-fit: contain;
+        }
+        
+        .button-element {
+            padding: 10px 20px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            text-align: center;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h2>🎨 Редактор UNIVERSAL SHOP</h2>
+        
+        <div class="control-group">
+            <div class="section-title">Фон</div>
+            <label>Цвет фона:</label>
+            <input type="color" id="bgColor" value="#ffffff">
+            
+            <label>Или изображение:</label>
+            <input type="file" id="bgImage" accept="image/*">
+        </div>
+        
+        <div class="control-group">
+            <div class="section-title">Текст</div>
+            <button class="tool-btn" onclick="addText()">+ Добавить текст</button>
+            <label>Шрифт:</label>
+            <select id="fontSelect">
+                <option value="Inter">Inter</option>
+                <option value="Arial">Arial</option>
+                <option value="Georgia">Georgia</option>
+                <option value="Monospace">Monospace</option>
+            </select>
+            <label>Цвет текста:</label>
+            <input type="color" id="textColor" value="#000000">
+        </div>
+        
+        <div class="control-group">
+            <div class="section-title">Изображения</div>
+            <button class="tool-btn" onclick="addImage()">+ Добавить фото</button>
+            <input type="file" id="imageUpload" accept="image/*" style="margin-top: 10px;">
+        </div>
+        
+        <div class="control-group">
+            <div class="section-title">Кнопки</div>
+            <button class="tool-btn" onclick="addButton()">+ Добавить кнопку</button>
+            <label>Текст кнопки:</label>
+            <input type="text" id="buttonText" placeholder="Например: Купить">
+            <label>Ссылка:</label>
+            <input type="text" id="buttonLink" placeholder="https://...">
+        </div>
+        
+        <div class="control-group">
+            <div class="section-title">Экспорт</div>
+            <button class="save-btn" onclick="saveDesign()">
+                💾 Сохранить дизайн
+            </button>
+            <button class="tool-btn" style="width: 100%; margin-top: 10px;" onclick="exportHTML()">
+                📁 Экспорт HTML
+            </button>
+        </div>
+    </div>
+    
+    <div class="workspace">
+        <div class="toolbar">
+            <button class="tool-btn" onclick="clearCanvas()">🗑️ Очистить</button>
+            <button class="tool-btn" onclick="undo()">↩️ Отменить</button>
+            <button class="tool-btn" onclick="preview()">👁️ Предпросмотр</button>
+            <button class="tool-btn" onclick="loadTemplate()">📋 Загрузить шаблон</button>
+        </div>
+        
+        <div class="canvas" id="canvas">
+            <!-- Элементы будут добавляться сюда -->
+        </div>
+        
+        <div style="color: #666; font-size: 0.9rem;">
+            <p>💡 <strong>Советы:</strong></p>
+            <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                <li>Перетаскивайте элементы мышью</li>
+                <li>Изменяйте размер углами элементов</li>
+                <li>Двойной клик для редактирования текста</li>
+                <li>Используйте правую кнопку мыши для контекстного меню</li>
+            </ul>
+        </div>
+    </div>
+    
+    <script>
+        let elements = [];
+        let history = [];
+        
+        function addText() {
+            const canvas = document.getElementById('canvas');
+            const textDiv = document.createElement('div');
+            textDiv.className = 'draggable text-element';
+            textDiv.contentEditable = true;
+            textDiv.textContent = 'Ваш текст здесь';
+            textDiv.style.left = '50px';
+            textDiv.style.top = '50px';
+            textDiv.style.color = document.getElementById('textColor').value;
+            textDiv.style.fontFamily = document.getElementById('fontSelect').value;
+            
+            makeDraggable(textDiv);
+            canvas.appendChild(textDiv);
+            elements.push(textDiv);
+            saveHistory();
+        }
+        
+        function addImage() {
+            const input = document.getElementById('imageUpload');
+            input.click();
+            
+            input.onchange = function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        const canvas = document.getElementById('canvas');
+                        const img = document.createElement('img');
+                        img.className = 'draggable image-element';
+                        img.src = event.target.result;
+                        img.style.left = '100px';
+                        img.style.top = '100px';
+                        
+                        makeDraggable(img);
+                        canvas.appendChild(img);
+                        elements.push(img);
+                        saveHistory();
+                    }
+                    reader.readAsDataURL(file);
+                }
+            };
+        }
+        
+        function addButton() {
+            const canvas = document.getElementById('canvas');
+            const button = document.createElement('button');
+            button.className = 'draggable button-element';
+            button.textContent = document.getElementById('buttonText').value || 'Кнопка';
+            button.style.left = '150px';
+            button.style.top = '200px';
+            
+            const link = document.getElementById('buttonLink').value;
+            if (link) {
+                button.onclick = function() {
+                    window.open(link, '_blank');
+                };
+            }
+            
+            makeDraggable(button);
+            canvas.appendChild(button);
+            elements.push(button);
+            saveHistory();
+        }
+        
+        function makeDraggable(element) {
+            let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+            
+            element.onmousedown = dragMouseDown;
+            
+            function dragMouseDown(e) {
+                e = e || window.event;
+                e.preventDefault();
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                document.onmouseup = closeDragElement;
+                document.onmousemove = elementDrag;
+            }
+            
+            function elementDrag(e) {
+                e = e || window.event;
+                e.preventDefault();
+                pos1 = pos3 - e.clientX;
+                pos2 = pos4 - e.clientY;
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                element.style.top = (element.offsetTop - pos2) + "px";
+                element.style.left = (element.offsetLeft - pos1) + "px";
+            }
+            
+            function closeDragElement() {
+                document.onmouseup = null;
+                document.onmousemove = null;
+                saveHistory();
+            }
+        }
+        
+        function saveDesign() {
+            const canvas = document.getElementById('canvas');
+            const design = {
+                backgroundColor: document.getElementById('bgColor').value,
+                elements: Array.from(canvas.children).map(child => ({
+                    type: child.className,
+                    content: child.textContent || child.src,
+                    style: child.style.cssText,
+                    position: {
+                        top: child.style.top,
+                        left: child.style.left
+                    }
+                }))
+            };
+            
+            localStorage.setItem('universalShopDesign', JSON.stringify(design));
+            alert('Дизайн сохранен в localStorage!');
+        }
+        
+        function exportHTML() {
+            const canvas = document.getElementById('canvas');
+            const html = `
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Мой магазин UNIVERSAL SHOP</title>
+    <style>
+        body { margin: 0; padding: 20px; background: ${document.getElementById('bgColor').value}; }
+        .element { position: absolute; }
+    </style>
+</head>
+<body>
+    ${canvas.innerHTML}
+</body>
+</html>`;
+            
+            const blob = new Blob([html], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'my-shop.html';
+            a.click();
+        }
+        
+        function clearCanvas() {
+            if (confirm('Очистить весь холст?')) {
+                document.getElementById('canvas').innerHTML = '';
+                elements = [];
+                saveHistory();
+            }
+        }
+        
+        function saveHistory() {
+            const canvas = document.getElementById('canvas');
+            history.push(canvas.innerHTML);
+            if (history.length > 10) history.shift();
+        }
+        
+        function undo() {
+            if (history.length > 1) {
+                history.pop();
+                document.getElementById('canvas').innerHTML = history[history.length - 1];
+            }
+        }
+        
+        function preview() {
+            const previewWindow = window.open('', '_blank');
+            previewWindow.document.write(document.getElementById('canvas').innerHTML);
+        }
+        
+        function loadTemplate() {
+            const templates = {
+                shop: '<div class="draggable text-element" style="left: 50px; top: 50px; font-size: 24px;">Мой магазин</div>' +
+                      '<button class="draggable button-element" style="left: 50px; top: 100px;">Купить сейчас</button>',
+                exchange: '<div class="draggable text-element" style="left: 50px; top: 50px; color: #667eea;">Обменник USDT/TON</div>' +
+                          '<div class="draggable text-element" style="left: 50px; top: 100px;">Курс: 1 TON = 2.5 USDT</div>'
+            };
+            
+            const choice = prompt('Выберите шаблон (shop/exchange):');
+            if (templates[choice]) {
+                document.getElementById('canvas').innerHTML += templates[choice];
+                saveHistory();
+            }
+        }
+        
+        // Инициализация
+        document.getElementById('bgColor').addEventListener('change', function() {
+            document.getElementById('canvas').style.background = this.value;
+        });
+        
+        document.getElementById('bgImage').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    document.getElementById('canvas').style.backgroundImage = `url(${event.target.result})`;
+                    document.getElementById('canvas').style.backgroundSize = 'cover';
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+        
+        // Загрузка сохраненного дизайна
+        const saved = localStorage.getItem('universalShopDesign');
+        if (saved) {
+            const design = JSON.parse(saved);
+            document.getElementById('canvas').style.background = design.backgroundColor;
+        }
+    </script>
+</body>
+</html>
